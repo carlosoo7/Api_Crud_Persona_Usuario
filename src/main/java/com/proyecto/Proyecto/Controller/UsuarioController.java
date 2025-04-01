@@ -1,7 +1,7 @@
 package com.proyecto.Proyecto.Controller;
 
 import com.proyecto.Proyecto.Entities.Usuario;
-import com.proyecto.Proyecto.Service.Interfaces.IUsuarioService;
+import com.proyecto.Proyecto.Service.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;

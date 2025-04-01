@@ -1,7 +1,7 @@
 package com.proyecto.Proyecto.Controller;
 
 import com.proyecto.Proyecto.Entities.Persona;
-import com.proyecto.Proyecto.Service.Interfaces.IPersonaService;
+import com.proyecto.Proyecto.Service.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/Proyecto/persona")
@@ -31,7 +33,7 @@ public class PersonaController {
         return personaService.eliminar(id);
     }
     @GetMapping
-    public ResponseEntity<Page<Persona>> listaPersona (Pageable pageable){
+    public ResponseEntity<List<Persona>> listaPersona (Pageable pageable){
         return personaService.consultarPersona(pageable);
     }
     @GetMapping("/id/{id}")
@@ -40,11 +42,11 @@ public class PersonaController {
     }
 
     @GetMapping("/pnombre/{pnombre}")
-    public ResponseEntity<Page<Persona>> getByPNombre(@PathVariable("pnombre") String pnombre,Pageable pageable){
+    public ResponseEntity<List<Persona>> getByPNombre(@PathVariable("pnombre") String pnombre,Pageable pageable){
         return personaService.findByNombre(pnombre,pageable);
     }
     @GetMapping("/edad/{edad}")
-    public ResponseEntity<Page<Persona>> getByEdad(@PathVariable("edad") int edad,Pageable pageable){
+    public ResponseEntity<List<Persona>> getByEdad(@PathVariable("edad") int edad,Pageable pageable){
         return personaService.findByEdad(edad, pageable);
     }
 }

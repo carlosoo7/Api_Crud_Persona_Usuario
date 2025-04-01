@@ -1,4 +1,4 @@
-package com.proyecto.Proyecto.Service.Interfaces;
+package com.proyecto.Proyecto.Service;
 
 import com.proyecto.Proyecto.Entities.Usuario;
 import com.proyecto.Proyecto.Repository.UsuarioRepository;

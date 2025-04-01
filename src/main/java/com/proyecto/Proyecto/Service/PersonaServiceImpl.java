@@ -1,4 +1,4 @@
-package com.proyecto.Proyecto.Service.Interfaces;
+package com.proyecto.Proyecto.Service;
 
 import com.proyecto.Proyecto.Entities.Persona;
 import com.proyecto.Proyecto.Repository.PersonaRepository;
@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
-
+import java.util.List;
 
 
 @Service("PersonaService")
@@ -81,9 +81,9 @@ public class PersonaServiceImpl implements IPersonaService{
     }
 
     @Override
-    public ResponseEntity<Page<Persona>> consultarPersona(
+    public ResponseEntity<List<Persona>> consultarPersona(
             @PageableDefault(size=10, sort="id", direction = Sort.Direction.ASC)Pageable pageable) {
-        return ResponseEntity.ok(IPersonaRepository.findAll(pageable));
+        return ResponseEntity.ok(IPersonaRepository.findAll(pageable).getContent());
     }
 
     @Override
@@ -92,16 +92,21 @@ public class PersonaServiceImpl implements IPersonaService{
     }
 
     @Override
-    public ResponseEntity<Page<Persona>> findByNombre(
+    public ResponseEntity<List<Persona>> findByNombre(
             String pnombre,@PageableDefault(size=10, sort="id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(IPersonaRepository.findBypNombre(pnombre, pageable));
+        List<Persona> personas = IPersonaRepository.findBypNombre(pnombre, pageable).getContent();
+
+        if (personas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(personas);
     }
 
     @Override
-    public ResponseEntity<Page<Persona>> findByEdad(
+    public ResponseEntity<List<Persona>> findByEdad(
             int edad, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Page<Persona> personas = IPersonaRepository.findByEdad(edad, pageable);
+        List<Persona> personas = IPersonaRepository.findByEdad(edad, pageable).getContent();
 
         if (personas.isEmpty()) {
             return ResponseEntity.noContent().build();
