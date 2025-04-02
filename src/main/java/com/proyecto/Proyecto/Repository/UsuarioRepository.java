@@ -12,4 +12,6 @@ import java.util.List;
 @Repository("IUsuarioRepo")
 public interface UsuarioRepository extends JpaRepository<Usuario, Serializable>, ListPagingAndSortingRepository<Usuario, Serializable> {
     public abstract Usuario findById(int id);
+    public abstract Usuario findByUsuario(String user);
+    public abstract Usuario findByaPikey(String apikey);
 }

@@ -1,11 +1,12 @@
 package com.proyecto.Proyecto.Service;
 
 import com.proyecto.Proyecto.Entities.Persona;
+import com.proyecto.Proyecto.Entities.Usuario;
 import com.proyecto.Proyecto.Repository.PersonaRepository;
+import com.proyecto.Proyecto.Repository.UsuarioRepository;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 @Service("PersonaService")
@@ -23,6 +27,10 @@ public class PersonaServiceImpl implements IPersonaService{
     @Autowired
     @Qualifier("IPersonaRepo")
     private PersonaRepository IPersonaRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
 
     private static final Logger logger = org.apache.logging.log4j.LogManager.getLogger(PersonaServiceImpl.class);
 
@@ -34,12 +42,13 @@ public class PersonaServiceImpl implements IPersonaService{
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error Porfavor Agregar Persona: El Campo Esta Vacio!");
             } else{
                 Persona guardado = IPersonaRepository.save(persona);
+                Usuario user = userActivation(guardado);
                 URI location = ServletUriComponentsBuilder
                         .fromCurrentRequest()
                         .path("/id/{id}")
                         .buildAndExpand(guardado.getId())
                         .toUri();
-                return ResponseEntity.created(location).build();
+                return ResponseEntity.created(location).body((user));
             }
         }catch(Exception e) {
             logger.error("Error No_Agregado: La Persona No Se Agrego!");
@@ -114,4 +123,30 @@ public class PersonaServiceImpl implements IPersonaService{
 
         return ResponseEntity.ok(personas);
     }
+    private Usuario userActivation(Persona persona) {
+        Random random = new Random();
+        String username;
+        String apiKey;
+        boolean exists;
+        do {
+            username = persona.getPNombre().substring(0, Math.min(persona.getPNombre().length(), 3)) +
+                    persona.getSNombre().substring(0, Math.min(persona.getSNombre().length(), 3)) +
+                    (1000 + random.nextInt(9000));
+            Optional<Usuario> userName = Optional.ofNullable(usuarioRepository.findByUsuario(username));
+            String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 20; i++) {
+                int index = ThreadLocalRandom.current().nextInt(caracteres.length());
+                sb.append(caracteres.charAt(index));
+            }
+            apiKey = sb.toString();
+            Optional<Usuario> userApi = Optional.ofNullable(usuarioRepository.findByaPikey(apiKey));
+            exists = userName.isPresent() || userApi.isPresent();
+        } while (exists);
+        Usuario guardar = new Usuario(persona.getId(), username, apiKey);
+        usuarioRepository.save(guardar);
+        return guardar;
+    }
+
+
 }

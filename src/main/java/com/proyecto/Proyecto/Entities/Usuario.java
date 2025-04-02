@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "Usuario", schema = "Proyecto")
 public class Usuario implements Serializable {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "idpersona")
     public int id;
