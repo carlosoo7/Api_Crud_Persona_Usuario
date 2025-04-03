@@ -127,12 +127,13 @@ public class PersonaServiceImpl implements IPersonaService{
         Random random = new Random();
         String username;
         String apiKey;
+        String password="12345678";
         boolean exists;
         do {
             username = persona.getPNombre().substring(0, Math.min(persona.getPNombre().length(), 3)) +
                     persona.getSNombre().substring(0, Math.min(persona.getSNombre().length(), 3)) +
                     (1000 + random.nextInt(9000));
-            Optional<Usuario> userName = Optional.ofNullable(usuarioRepository.findByUsuario(username));
+            Optional<Usuario> userName = Optional.ofNullable(usuarioRepository.findByLog(username));
             String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 20; i++) {
@@ -143,7 +144,7 @@ public class PersonaServiceImpl implements IPersonaService{
             Optional<Usuario> userApi = Optional.ofNullable(usuarioRepository.findByaPikey(apiKey));
             exists = userName.isPresent() || userApi.isPresent();
         } while (exists);
-        Usuario guardar = new Usuario(persona.getId(), username, apiKey);
+        Usuario guardar = new Usuario(persona.getId(), username, password, apiKey);
         usuarioRepository.save(guardar);
         return guardar;
     }

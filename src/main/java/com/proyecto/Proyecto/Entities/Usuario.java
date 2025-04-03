@@ -19,6 +19,9 @@ public class Usuario implements Serializable {
     @Column(name = "login")
     private String log;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "apikey")
     private String aPikey;
 
