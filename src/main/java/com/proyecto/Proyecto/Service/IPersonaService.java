@@ -1,7 +1,6 @@
 package com.proyecto.Proyecto.Service;
 
 import com.proyecto.Proyecto.Entities.Persona;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
