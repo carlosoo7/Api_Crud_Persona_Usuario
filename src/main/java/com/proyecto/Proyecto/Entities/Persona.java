@@ -1,11 +1,9 @@
 package com.proyecto.Proyecto.Entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter @ToString
 @Entity
@@ -14,10 +12,10 @@ public class Persona  implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
-    public Long id;
+    public int id;
 
     @Column(name = "identificacion")
-    private long ident;
+    private int ident;
 
     @Column(name = "pnombre")
     private String pNombre;
@@ -35,16 +33,12 @@ public class Persona  implements Serializable {
     private String email;
 
     @Column (name = "fechanacimiento")
-    private LocalDate fechaN;
+    private String fechaN;
 
     @Column(name = "edad")
     private int edad;
 
     @Column(name = "edadclinica")
     private String edadC;
-
-    @OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
-    @JsonIgnore
-    Usuario usuario;
 
 }
